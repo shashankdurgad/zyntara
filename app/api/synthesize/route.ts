@@ -36,10 +36,10 @@ You must output a JSON object with this EXACT structure:
       "spec": "Technical specification for a developer to implement this fix.",
       "type": "feature" | "bugfix",
       "screenshotIndex": number (index of the most relevant screenshot from the provided list),
-      "annotationPrompt": "Detailed instruction for an AI image editor on how to annotate the screenshot. For features: describe where to add new UI elements and what they should look like. For bugfixes: describe what to circle/highlight and explain the issue."
+      "uiDesignPrompt": "Detailed description of the new UI to implement. For features: describe the exact layout, components, styling, and placement of new elements as they would appear in the final product. For bugfixes: describe the corrected UI state."
     },
-    { "title": "...", "description": "...", "spec": "...", "type": "...", "screenshotIndex": ..., "annotationPrompt": "..." },
-    { "title": "...", "description": "...", "spec": "...", "type": "...", "screenshotIndex": ..., "annotationPrompt": "..." }
+    { "title": "...", "description": "...", "spec": "...", "type": "...", "screenshotIndex": ..., "uiDesignPrompt": "..." },
+    { "title": "...", "description": "...", "spec": "...", "type": "...", "screenshotIndex": ..., "uiDesignPrompt": "..." }
   ]
 }
 
@@ -202,38 +202,38 @@ export async function POST(req: NextRequest) {
           
           if (ENABLE_VISION_ANALYSIS) {
             const analysisPrompt = feature.type === "feature"
-            ? `You are analyzing a website screenshot to create a detailed image generation prompt for adding UX design annotations.
+            ? `You are analyzing a website screenshot to create a detailed image generation prompt for rendering the SAME page WITH the new feature actually implemented in the UI.
 
 Screenshot Context: ${screenshotData.url} - ${screenshotData.title}
 Feature to Add: "${feature.title}"
 Description: ${feature.description}
 
-Analyze this screenshot carefully and create a DETAILED text description for an image generation AI that will recreate this screenshot WITH professional UX annotations added.
+Analyze this screenshot carefully and create a DETAILED text description for an image generation AI that will recreate this screenshot AS IF the new feature has been fully implemented.
 
 Your description should include:
-1. EXACT description of what's in the screenshot (layout, colors, text, elements, positioning)
-2. WHERE to add blue/green arrows (specific positions like "top-right corner", "center of navigation bar")
-3. WHAT text labels to add and their exact content
-4. WHERE to add semi-transparent blue/green boxes to highlight areas
-5. Any mockup UI elements to overlay showing the new feature
+1. EXACT description of the current screenshot (layout, colors, text, elements, positioning)
+2. WHERE the new UI elements should appear (specific positions)
+3. WHAT the new elements look like (buttons, inputs, modals, etc.) - styled to match the existing design
+4. HOW they integrate with the existing layout (no arrows, labels, or overlay annotations)
+5. The final result should look like a real screenshot of the updated website, not a mockup with annotations
 
-Format: Write a single detailed paragraph describing the annotated image to generate. Be extremely specific about positions, colors, and text content.`
-            : `You are analyzing a website screenshot to create a detailed image generation prompt for adding UX audit annotations.
+Format: Write a single detailed paragraph describing the rendered UI image to generate. Be extremely specific about the new elements' appearance, placement, and styling to match the existing design system.`
+            : `You are analyzing a website screenshot to create a detailed image generation prompt for rendering the SAME page WITH the bugfix applied - showing the corrected UI.
 
 Screenshot Context: ${screenshotData.url} - ${screenshotData.title}
 Issue Found: "${feature.title}"
 Description: ${feature.description}
 
-Analyze this screenshot carefully and create a DETAILED text description for an image generation AI that will recreate this screenshot WITH professional UX audit annotations added.
+Analyze this screenshot carefully and create a DETAILED text description for an image generation AI that will recreate this screenshot AS IF the bug has been fixed and the corrected UI is displayed.
 
 Your description should include:
-1. EXACT description of what's in the screenshot (layout, colors, text, elements, positioning)
-2. WHERE to add red/orange circles or boxes (specific positions)
-3. WHAT warning text labels to add and their exact content
-4. WHERE to add arrows pointing to issues
-5. Any warning indicators or attention markers
+1. EXACT description of the current screenshot (layout, colors, text, elements, positioning)
+2. WHAT needs to change to fix the issue (corrected text, fixed layout, resolved visual bug)
+3. HOW the corrected elements should look and where they appear
+4. The final result should look like a real screenshot of the fixed website - no annotations, circles, or overlay markers
+5. Match the existing design system for consistency
 
-Format: Write a single detailed paragraph describing the annotated image to generate. Be extremely specific about positions, colors, and text content.`;
+Format: Write a single detailed paragraph describing the rendered corrected UI image to generate. Be extremely specific about the fixed elements' appearance and placement.`;
 
             console.log(`Step 1: 💰 Analyzing screenshot with Gemini Vision...`);
             
@@ -254,7 +254,7 @@ Format: Write a single detailed paragraph describing the annotated image to gene
             console.log(`Description preview: ${detailedDescription.substring(0, 150)}...`);
           } else {
             console.log(`⚠️  Vision Analysis DISABLED - Using fallback description`);
-            detailedDescription = `A website screenshot showing ${feature.title}. ${feature.description}. Add professional UX annotations with ${feature.type === "feature" ? "blue/green" : "red/orange"} colors.`;
+            detailedDescription = `A website screenshot showing ${feature.title}. ${feature.description}. Render the page with the ${feature.type === "feature" ? "new feature implemented" : "bugfix applied"} in the UI - no annotations.`;
           }
 
           // STEP 2: Generate annotated image using Gemini 3 Pro Image with proper SDK
@@ -283,19 +283,19 @@ Format: Write a single detailed paragraph describing the annotated image to gene
 
           console.log(`Step 2: 💰 Generating annotated image with Gemini 3 Pro Image...`);
           
-          const imageGenPrompt = `Create a professional annotated website screenshot based on this description:
+          const imageGenPrompt = `Create a photorealistic website screenshot showing the page WITH the ${feature.type === "feature" ? "new feature fully implemented" : "bugfix applied and corrected UI"}.
 
 ${detailedDescription}
 
 Style requirements:
-- Photorealistic website screenshot as the base
-- Professional UX ${feature.type === "feature" ? "design review" : "audit"} annotations overlaid
-- Clear, readable text labels
-- ${feature.type === "feature" ? "Blue/green" : "Red/orange"} accent colors for annotations
-- High contrast for visibility
+- Photorealistic website screenshot
+- New/corrected UI elements integrated seamlessly into the existing design
+- No annotations, arrows, labels, or overlay boxes
+- The result should look like a real screenshot of the ${feature.type === "feature" ? "updated" : "fixed"} website
+- Match the existing design system (colors, typography, spacing)
 - Modern, clean design aesthetic
 
-Generate the complete annotated screenshot as described above.`;
+Generate the complete rendered UI screenshot as described above.`;
           
           try {
             // Initialize Google GenAI client with proper configuration

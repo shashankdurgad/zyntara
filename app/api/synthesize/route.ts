@@ -155,7 +155,7 @@ export async function POST(req: NextRequest) {
 
           // Initialize vision model for analysis
           const visionModel = new ChatGoogleGenerativeAI({
-            model: "gemini-2.0-flash-exp",
+            model: "gemini-3-pro",
             temperature: 0.4,
           });
 

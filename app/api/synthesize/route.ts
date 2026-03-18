@@ -89,10 +89,10 @@ export async function POST(req: NextRequest) {
         try {
           sendEvent("status", "Initializing AI analysis...");
 
+    // @ts-expect-error - modelKwargs supported at runtime
     const chatModel = new ChatGoogleGenerativeAI({
       model: "gemini-2.5-flash",
       temperature: 0.3,
-      // @ts-ignore
       modelKwargs: {
               response_mime_type: "application/json",
       },

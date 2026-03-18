@@ -15,11 +15,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Initialize the Gemini model
+    // @ts-expect-error - modelKwargs supported at runtime
     const chatModel = new ChatGoogleGenerativeAI({
       model: "gemini-2.5-flash",
       maxOutputTokens: 8192,
       temperature: 0.7,
-      // @ts-ignore - modelKwargs is supported in runtime but types might be outdated or strict
       modelKwargs: {
         response_mime_type: "application/json",
       },

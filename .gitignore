@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# persona-service (Python)
+persona-service/__pycache__
+persona-service/.venv
+persona-service/*.pyc

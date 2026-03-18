@@ -17,13 +17,28 @@ import { AgentLogs } from "@/components/AgentLogs"
 import { useCallback } from "react"
 import { GitHubConnectButton } from "@/components/GitHubConnectButton"
 
+function derivePersonaContext(profile: { profile?: { name?: string; demographics?: Record<string, string>; psychographics?: { goals?: string[]; interests?: string[] } } }): string {
+    if (!profile?.profile) return ""
+    const p = profile.profile
+    const name = p.name || "User"
+    const demo = p.demographics
+    const loc = demo?.location ? `, ${demo.location}` : ""
+    const age = demo?.age ? `, ${demo.age}` : ""
+    const job = demo?.job_title ? `, ${demo.job_title}` : ""
+    const goals = p.psychographics?.goals?.slice(0, 2).join("; ") || ""
+    const interests = p.psychographics?.interests?.slice(0, 2).join("; ") || ""
+    return `${name}${loc}${age}${job}. Goals: ${goals}. Interests: ${interests}`
+}
+
 function ResultContent() {
     const searchParams = useSearchParams()
     const url = searchParams.get("url")
     const context = searchParams.get("context")
+    const mode = searchParams.get("mode")
 
     const [result, setResult] = useState("")
     const [isComplete, setIsComplete] = useState(false)
+    const [personaContext, setPersonaContext] = useState<string | null>(null)
     const [step, setStep] = useState(1) // 1: Profile+Sitemap, 2: Sitemap+Screenshot, 3: Feedback+Specs
     const [visitedPaths, setVisitedPaths] = useState<string[]>([])
     const [synthesisData, setSynthesisData] = useState<any>(null)
@@ -78,12 +93,13 @@ function ResultContent() {
     }, [step]);
 
     // Auto-start Agent Effect
+    const effectiveContext = personaContext ?? context ?? "";
     useEffect(() => {
-        if (step === 2 && !isRunning && !hasAutoStarted.current) {
+        if (step === 2 && !isRunning && !hasAutoStarted.current && effectiveContext) {
             hasAutoStarted.current = true;
-            startAgent(url || "", context || "", handleUrlVisited);
+            startAgent(url || "", effectiveContext, handleUrlVisited);
         }
-    }, [step, isRunning, startAgent, url, context, handleUrlVisited]);
+    }, [step, isRunning, startAgent, url, effectiveContext, handleUrlVisited]);
 
     // Synthesis Effect - handles streaming response
     useEffect(() => {
@@ -156,8 +172,32 @@ function ResultContent() {
     }, [step, synthesisData, result])
 
 
+    // RAG mode: load profile from sessionStorage
     useEffect(() => {
-        if (!url || !context || hasStarted.current) return
+        if (mode === "rag" && url && !hasStarted.current) {
+            hasStarted.current = true
+            const stored = sessionStorage.getItem("zyntara_rag_profile")
+            if (stored) {
+                try {
+                    const profile = JSON.parse(stored)
+                    setResult(JSON.stringify(profile))
+                    setPersonaContext(derivePersonaContext(profile))
+                    setIsComplete(true)
+                } catch (e) {
+                    console.error("Failed to parse RAG profile", e)
+                    setResult("Error: Invalid stored profile.")
+                    setIsComplete(true)
+                }
+            } else {
+                setResult("Error: No RAG profile found. Please generate a persona first.")
+                setIsComplete(true)
+            }
+        }
+    }, [mode, url])
+
+    // Manual mode: fetch from analyze API
+    useEffect(() => {
+        if (!url || !context || mode === "rag" || hasStarted.current) return
 
         const fetchData = async () => {
             hasStarted.current = true
@@ -190,7 +230,7 @@ function ResultContent() {
         }
 
         fetchData()
-    }, [url, context])
+    }, [url, context, mode])
 
 
     return (
@@ -296,7 +336,7 @@ function ResultContent() {
                         <ScreenshotCard
                             currentImage={currentImage}
                             isRunning={isRunning}
-                            onStart={() => startAgent(url || "", context || "", handleUrlVisited)}
+                            onStart={() => startAgent(url || "", effectiveContext, handleUrlVisited)}
                             hasUrl={!!url}
                         />
                     </div>
@@ -398,7 +438,7 @@ function ResultContent() {
                                 <Button
                                     size="lg"
                                     className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
-                                    onClick={() => startAgent(url || "", context || "", handleUrlVisited)}
+                                    onClick={() => startAgent(url || "", effectiveContext, handleUrlVisited)}
                                 >
                                     <Play className="w-4 h-4 mr-2 fill-current" />
                                     Start Auto-Pilot

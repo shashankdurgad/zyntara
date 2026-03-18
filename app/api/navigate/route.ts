@@ -135,10 +135,10 @@ export async function POST(req: NextRequest) {
                 const analysisNode = async (state: typeof GraphState.State) => {
                     if (isStreamClosed) return { done: true };
 
+                    // @ts-expect-error - modelKwargs supported at runtime
                     const visionModel = new ChatGoogleGenerativeAI({
                         model: "gemini-2.5-flash",
                         temperature: 0.2,
-                        // @ts-ignore
                         modelKwargs: { response_mime_type: "application/json" }
                     });
 

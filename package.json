@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "persona:service": "cd persona-service && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
   },
   "dependencies": {
     "@langchain/community": "^1.1.0",

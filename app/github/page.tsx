@@ -37,7 +37,7 @@ export default function GitHubPage() {
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("treeminspls_github");
+    const stored = localStorage.getItem("zyntara_github");
     if (stored) {
       const parsed = JSON.parse(stored);
       setSettings(parsed);
@@ -57,13 +57,13 @@ export default function GitHubPage() {
 
   // Save settings to localStorage
   const saveSettings = () => {
-    localStorage.setItem("treeminspls_github", JSON.stringify(settings));
+    localStorage.setItem("zyntara_github", JSON.stringify(settings));
   };
 
   // Clear all settings and disconnect
   const clearSettings = () => {
     if (confirm("Are you sure you want to disconnect from GitHub?\n\nThis will clear all saved settings.")) {
-      localStorage.removeItem("treeminspls_github");
+      localStorage.removeItem("zyntara_github");
       setSettings({ token: "", repo: "", branch: "main" });
       setIsConnected(false);
       setIsWorkflowSetup(false);
@@ -105,12 +105,12 @@ export default function GitHubPage() {
           repoName: s.repo,
           connectedAt: new Date().toISOString()
         };
-        localStorage.setItem("treeminspls_github", JSON.stringify(updatedSettings));
+        localStorage.setItem("zyntara_github", JSON.stringify(updatedSettings));
       } else {
         setIsConnected(false);
         setIsWorkflowSetup(false);
         // Clear connected flag on failure
-        localStorage.setItem("treeminspls_github", JSON.stringify({ ...s, connected: false, workflowSetup: false }));
+        localStorage.setItem("zyntara_github", JSON.stringify({ ...s, connected: false, workflowSetup: false }));
         setTestResult({ success: false, message: data.error });
       }
     } catch (error: any) {
@@ -143,10 +143,10 @@ export default function GitHubPage() {
         setIsWorkflowSetup(true);
         setSetupResult({ success: true, message: data.message });
         // Update localStorage with workflow status
-        const stored = localStorage.getItem("treeminspls_github");
+        const stored = localStorage.getItem("zyntara_github");
         if (stored) {
           const current = JSON.parse(stored);
-          localStorage.setItem("treeminspls_github", JSON.stringify({
+          localStorage.setItem("zyntara_github", JSON.stringify({
             ...current,
             workflowSetup: true,
             workflowSetupAt: new Date().toISOString()
@@ -278,7 +278,7 @@ export default function GitHubPage() {
           <CardFooter className="flex justify-between">
             <div className="flex items-center gap-2">
               {testResult && (
-                <div className={`flex items-center gap-2 text-sm ${testResult.success ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`flex items-center gap-2 text-sm ${testResult.success ? 'text-primary' : 'text-destructive'}`}>
                   {testResult.success ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                   {testResult.message}
                 </div>
@@ -296,12 +296,12 @@ export default function GitHubPage() {
 
         {/* Setup Workflow Card - Only show if connected */}
         {isConnected && (
-          <Card className={isWorkflowSetup ? "border-green-200 bg-green-50/50" : ""}>
+          <Card className={isWorkflowSetup ? "border-primary/30 bg-primary/5" : ""}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FolderGit2 className="w-5 h-5" />
                 Workflow Setup
-                {isWorkflowSetup && <Check className="w-5 h-5 text-green-600" />}
+                {isWorkflowSetup && <Check className="w-5 h-5 text-primary" />}
               </CardTitle>
               <CardDescription>
                 {isWorkflowSetup 
@@ -313,7 +313,7 @@ export default function GitHubPage() {
             <CardContent>
               {isWorkflowSetup ? (
                 <div className="space-y-4">
-                  <div className="text-sm text-green-700 bg-green-100 p-4 rounded-lg">
+                  <div className="text-sm text-primary bg-primary/10 p-4 rounded-lg border border-primary/20">
                     <p className="font-medium mb-2">✓ Workflow is ready!</p>
                     <p>When you export features, they will be pushed to your repo and the workflow will automatically:</p>
                     <ul className="list-disc list-inside mt-2 space-y-1">
@@ -345,7 +345,7 @@ export default function GitHubPage() {
                       </Button>
                     </div>
                     {setupResult && (
-                      <div className={`mt-2 flex items-center gap-2 text-sm ${setupResult.success ? 'text-green-600' : 'text-red-600'}`}>
+                      <div className={`mt-2 flex items-center gap-2 text-sm ${setupResult.success ? 'text-primary' : 'text-destructive'}`}>
                         {setupResult.success ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                         {setupResult.message}
                       </div>
@@ -371,7 +371,7 @@ export default function GitHubPage() {
               <CardFooter className="flex justify-between">
                 <div className="flex items-center gap-2">
                   {setupResult && (
-                    <div className={`flex items-center gap-2 text-sm ${setupResult.success ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`flex items-center gap-2 text-sm ${setupResult.success ? 'text-primary' : 'text-destructive'}`}>
                       {setupResult.success ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                       {setupResult.message}
                     </div>
@@ -399,7 +399,7 @@ export default function GitHubPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <span>GitHub Connection</span>
-                  <span className="flex items-center gap-2 text-green-600">
+                  <span className="flex items-center gap-2 text-primary">
                     <Check className="w-4 h-4" /> Connected
                   </span>
                 </div>
@@ -426,17 +426,17 @@ export default function GitHubPage() {
                       {settings.websiteUrl}
                     </a>
                   ) : (
-                    <span className="text-amber-600">Not configured</span>
+                    <span className="text-amber-500">Not configured</span>
                   )}
                 </div>
                 <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <span>Workflow Status</span>
                   {isWorkflowSetup ? (
-                    <span className="flex items-center gap-2 text-green-600">
+                    <span className="flex items-center gap-2 text-primary">
                       <Check className="w-4 h-4" /> Ready
                     </span>
                   ) : (
-                    <span className="flex items-center gap-2 text-amber-600">
+                    <span className="flex items-center gap-2 text-amber-500">
                       <X className="w-4 h-4" /> Not configured
                     </span>
                   )}

@@ -65,11 +65,11 @@ export function useVisualAgent() {
                             
                             // Also store full screenshot metadata for later use
                             try {
-                                const stored = localStorage.getItem("treeminspls_screenshots");
+                                const stored = localStorage.getItem("zyntara_screenshots");
                                 const screenshots = stored ? JSON.parse(stored) : [];
                                 screenshots.push(msg.data);
                                 if (screenshots.length > 20) screenshots.shift(); // Keep last 20
-                                localStorage.setItem("treeminspls_screenshots", JSON.stringify(screenshots));
+                                localStorage.setItem("zyntara_screenshots", JSON.stringify(screenshots));
                             } catch (e) { console.error("Screenshot storage error", e); }
                         } else if (msg.type === "visit") {
                             if (onUrlVisited) onUrlVisited(msg.data);
@@ -79,14 +79,14 @@ export function useVisualAgent() {
                             // Persist critiques
                             if (msg.type === "analysis") {
                                 try {
-                                    const stored = localStorage.getItem("treeminspls_critiques");
+                                    const stored = localStorage.getItem("zyntara_critiques");
                                     const critiques = stored ? JSON.parse(stored) : [];
                                     critiques.push({
                                         critique: msg.data.critique,
                                         reasoning: msg.data.reasoning,
                                         timestamp: Date.now()
                                     });
-                                    localStorage.setItem("treeminspls_critiques", JSON.stringify(critiques));
+                                    localStorage.setItem("zyntara_critiques", JSON.stringify(critiques));
                                 } catch (err) { console.error("Storage error", err); }
                             }
                         }

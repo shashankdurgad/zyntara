@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       priority: "medium",
       estimated_complexity: "medium",
       source: {
-        tool: "treeminspls",
+        tool: "zyntara",
         timestamp: new Date().toISOString(),
         screenshotUrl: feature.screenshotUrl,
         screenshotTitle: feature.screenshotTitle

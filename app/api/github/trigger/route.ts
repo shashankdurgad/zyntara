@@ -187,7 +187,7 @@ export async function POST(req: NextRequest) {
     const clientPayload: Record<string, any> = {
       feature: processedFeature,
       triggered_at: new Date().toISOString(),
-      source: "treeminspls"
+      source: "zyntara"
     };
 
     // Include API key in payload if provided (note: will be visible in Actions logs)

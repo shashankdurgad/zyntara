@@ -38,12 +38,12 @@ export function PersonaProfileCard({ data }: { data: PersonaData }) {
         : "US";
 
     return (
-        <Card className="h-full shadow-lg border flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm">
+        <Card className="h-full shadow-lg border border-primary/10 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm">
             {/* Header / Cover Area */}
-            <div className="h-24 bg-gradient-to-r from-primary to-primary/80 relative">
+            <div className="h-24 bg-gradient-to-r from-primary via-pink-500 to-amber-500 relative">
                 <div className="absolute -bottom-10 left-6">
-                    <Avatar className="w-20 h-20 border-4 border-white shadow-md">
-                        <AvatarImage src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${name}&backgroundColor=c6f7e2`} />
+                    <Avatar className="w-20 h-20 border-4 border-card shadow-lg">
+                        <AvatarImage src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${name}&backgroundColor=e9d5ff`} />
                         <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                 </div>
@@ -89,26 +89,26 @@ export function PersonaProfileCard({ data }: { data: PersonaData }) {
                 {/* Goals & Frustrations Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                        <h4 className="text-sm font-semibold flex items-center gap-2 text-emerald-700 uppercase tracking-wider">
+                        <h4 className="text-sm font-semibold flex items-center gap-2 text-primary uppercase tracking-wider">
                             <Target className="w-4 h-4" /> Goals
                         </h4>
                         <ul className="space-y-2">
                             {psychographics.goals.map((goal, i) => (
                                 <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                                    <span className="text-emerald-500 mt-1">•</span> {goal}
+                                    <span className="text-primary mt-1">•</span> {goal}
                                 </li>
                             ))}
                         </ul>
                     </div>
 
                     <div className="space-y-3">
-                        <h4 className="text-sm font-semibold flex items-center gap-2 text-rose-700 uppercase tracking-wider">
+                        <h4 className="text-sm font-semibold flex items-center gap-2 text-destructive uppercase tracking-wider">
                             <AlertTriangle className="w-4 h-4" /> Frustrations
                         </h4>
                         <ul className="space-y-2">
                             {psychographics.frustrations.map((frust, i) => (
                                 <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                                    <span className="text-rose-500 mt-1">•</span> {frust}
+                                    <span className="text-destructive mt-1">•</span> {frust}
                                 </li>
                             ))}
                         </ul>
@@ -125,7 +125,7 @@ export function PersonaProfileCard({ data }: { data: PersonaData }) {
                         </p>
                     </div>
 
-                    <div className="bg-slate-50 p-4 rounded-lg border">
+                    <div className="bg-muted/30 p-4 rounded-lg border border-border">
                         <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
                             <Sparkles className="w-4 h-4 text-amber-500" /> Relationship with Site
                         </h4>

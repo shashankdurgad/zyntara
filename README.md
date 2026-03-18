@@ -1,10 +1,10 @@
-# 🌲 treeminspls
+# ✨ Zyntara
 
-AI-powered UX analysis tool that generates persona-based website feedback and actionable feature recommendations.
+AI-powered UX analysis tool that generates persona-based website feedback and actionable feature recommendations. Built for designers who care about craft.
 
 ## Overview
 
-treeminspls uses AI agents to automatically navigate your website as a specific user persona, collecting UX critiques and generating detailed improvement recommendations. It can even create GitHub Pull Requests with AI-generated code fixes.
+Zyntara uses AI agents to automatically navigate your website as a specific user persona, collecting UX critiques and generating detailed improvement recommendations. It can even create GitHub Pull Requests with AI-generated code fixes.
 
 ## Features
 
@@ -16,7 +16,7 @@ treeminspls uses AI agents to automatically navigate your website as a specific 
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
 - **UI Components**: shadcn/ui
 - **AI**: Google Gemini (2.5 Flash, 3.0 Gemini Pro, 3.0 Gemini Pro Image Preview)
 - **Browser Automation**: Playwright
@@ -34,8 +34,8 @@ treeminspls uses AI agents to automatically navigate your website as a specific 
 
 ```bash
 # Clone the repository
-git clone https://github.com/w3joe/treeminspls.git
-cd treeminspls
+git clone https://github.com/w3joe/zyntara.git
+cd zyntara
 
 # Install dependencies
 npm install --legacy-peer-deps
@@ -92,7 +92,7 @@ Navigate to `/github` to set up:
 ## Project Structure
 
 ```
-treeminspls/
+zyntara/
 ├── app/
 │   ├── api/
 │   │   ├── analyze/      # Persona analysis endpoint
@@ -132,5 +132,4 @@ MIT
 
 ---
 
-Built with 🌲 by treeminspls
-
+Built with ✨ by Zyntara

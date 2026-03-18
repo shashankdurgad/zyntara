@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useMemo } from "react";
 import dynamic from 'next/dynamic';
-import { Loader2, ChevronRight, ChevronDown, PanelLeftOpen, PanelLeftClose, TreePine } from "lucide-react";
+import { Loader2, ChevronRight, ChevronDown, PanelLeftOpen, PanelLeftClose, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -250,10 +250,10 @@ export function SitemapVisualizer({ url, visitedPaths = [] }: SitemapVisualizerP
     };
 
     return (
-        <Card className="h-full flex flex-col shadow-lg border">
+        <Card className="h-full flex flex-col shadow-lg border border-primary/10 bg-card/80">
             <CardHeader className="border-b bg-primary/5 pb-4">
                 <CardTitle className="text-xl flex items-center gap-2">
-                    <TreePine className="w-5 h-5 text-primary" />
+                    <Sparkles className="w-5 h-5 text-primary" />
                     Site Structure
                 </CardTitle>
             </CardHeader>

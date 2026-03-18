@@ -14,7 +14,7 @@ interface ScreenshotCardProps {
 export function ScreenshotCard({ currentImage, isRunning, onStart, hasUrl }: ScreenshotCardProps) {
 
     return (
-        <Card className="h-full shadow-lg border flex flex-col overflow-hidden">
+        <Card className="h-full shadow-lg border border-primary/10 flex flex-col overflow-hidden bg-card/80">
             <CardHeader className="border-b bg-primary/5 pb-3">
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">

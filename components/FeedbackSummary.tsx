@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 // import { Progress } from "@/components/ui/progress"  <-- Removed
 
 // Using standard div for progress to avoid shadcn install dep overhead if missing
-import { CheckCircle2, XCircle, TreePine } from "lucide-react"
+import { CheckCircle2, XCircle, Sparkles } from "lucide-react"
 
 interface FeedbackSummaryProps {
     data: any;
@@ -15,10 +15,10 @@ export function FeedbackSummary({ data, streamingText }: FeedbackSummaryProps) {
   // Show streaming text while analysis is being generated
   if (!data && streamingText) {
     return (
-      <Card className="h-full shadow-lg border flex flex-col overflow-hidden">
+      <Card className="h-full shadow-lg border border-primary/10 flex flex-col overflow-hidden bg-card/80">
         <CardHeader className="bg-primary/5 border-b pb-6">
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <TreePine className="w-6 h-6 text-primary animate-pulse" />
+            <Sparkles className="w-6 h-6 text-primary animate-pulse" />
             Generating UX Analysis...
           </CardTitle>
         </CardHeader>
@@ -50,12 +50,12 @@ export function FeedbackSummary({ data, streamingText }: FeedbackSummaryProps) {
   const { ux_score, strengths, weaknesses, narrative } = data.summary;
 
   return (
-    <Card className="h-full shadow-lg border flex flex-col overflow-hidden">
+    <Card className="h-full shadow-lg border border-primary/10 flex flex-col overflow-hidden bg-card/80">
       <CardHeader className="bg-primary/5 border-b pb-6">
          <div className="flex justify-between items-start">
             <div>
                 <CardTitle className="flex items-center gap-2 text-2xl">
-                    <TreePine className="w-6 h-6 text-primary" />
+                    <Sparkles className="w-6 h-6 text-primary" />
                     UX Synthesis
                 </CardTitle>
                 <CardDescription className="mt-2 text-base">
@@ -87,12 +87,12 @@ export function FeedbackSummary({ data, streamingText }: FeedbackSummaryProps) {
 
         <div className="grid gap-4">
             <div>
-                <h4 className="font-semibold text-green-700 flex items-center gap-2 mb-3">
+                <h4 className="font-semibold text-primary flex items-center gap-2 mb-3">
                     <CheckCircle2 className="w-4 h-4" /> Strong Points
                 </h4>
                 <ul className="space-y-2">
                     {strengths.map((s: string, i: number) => (
-                        <li key={i} className="text-sm bg-green-50 text-green-900 px-3 py-2 rounded-md border border-green-100">
+                        <li key={i} className="text-sm bg-primary/10 text-foreground px-3 py-2 rounded-md border border-primary/20">
                             {s}
                         </li>
                     ))}
@@ -100,12 +100,12 @@ export function FeedbackSummary({ data, streamingText }: FeedbackSummaryProps) {
             </div>
             
             <div>
-                <h4 className="font-semibold text-red-700 flex items-center gap-2 mb-3">
+                <h4 className="font-semibold text-destructive flex items-center gap-2 mb-3">
                     <XCircle className="w-4 h-4" /> Areas for Improvement
                 </h4>
                 <ul className="space-y-2">
                     {weaknesses.map((w: string, i: number) => (
-                        <li key={i} className="text-sm bg-red-50 text-red-900 px-3 py-2 rounded-md border border-red-100">
+                        <li key={i} className="text-sm bg-destructive/10 text-foreground px-3 py-2 rounded-md border border-destructive/20">
                             {w}
                         </li>
                     ))}

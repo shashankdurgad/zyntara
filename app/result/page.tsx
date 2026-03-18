@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { SitemapVisualizer } from "@/components/SitemapVisualizer"
 import { ScreenshotCard } from "@/components/ScreenshotCard"
-import { ArrowRight, RotateCcw, User, Play, Loader2, TreePine } from "lucide-react"
+import { ArrowRight, RotateCcw, User, Play, Loader2, Sparkles } from "lucide-react"
 import { FeedbackSummary } from "@/components/FeedbackSummary"
 import { FeatureProposals } from "@/components/FeatureProposals"
 import { PersonaProfileCard } from "@/components/PersonaProfileCard"
@@ -90,10 +90,10 @@ function ResultContent() {
         if (step === 3 && !synthesisData) {
             const fetchSynthesis = async () => {
                 try {
-                    const storedCritiques = localStorage.getItem("treeminspls_critiques")
+                    const storedCritiques = localStorage.getItem("zyntara_critiques")
                     const critiques = storedCritiques ? JSON.parse(storedCritiques) : []
 
-                    const storedScreenshots = localStorage.getItem("treeminspls_screenshots")
+                    const storedScreenshots = localStorage.getItem("zyntara_screenshots")
                     const images = storedScreenshots ? JSON.parse(storedScreenshots) : []
 
                     const res = await fetch("/api/synthesize", {
@@ -137,8 +137,8 @@ function ResultContent() {
                                 } else if (event.type === "complete") {
                                     setSynthesisData(event.data);
                                     // Clear storage after successful synthesis
-                                    localStorage.removeItem("treeminspls_critiques");
-                                    localStorage.removeItem("treeminspls_screenshots");
+                                    localStorage.removeItem("zyntara_critiques");
+                                    localStorage.removeItem("zyntara_screenshots");
                                 } else if (event.type === "status") {
                                     console.log("Status:", event.data);
                                 } else if (event.type === "error") {
@@ -246,7 +246,7 @@ function ResultContent() {
                             return parsedData ? (
                                 <PersonaProfileCard data={parsedData} />
                             ) : (
-                                <Card className="h-full shadow-lg border bg-white/50 backdrop-blur-sm">
+                                <Card className="h-full shadow-lg border border-primary/10 bg-card/80 backdrop-blur-sm">
                                     <CardHeader className="border-b bg-muted/20">
                                         <CardTitle className="flex items-center gap-2">
                                             <User className="w-5 h-5 text-primary" />
@@ -309,15 +309,15 @@ function ResultContent() {
                 >
                     {/* Prominent Loading Overlay */}
                     {step === 3 && !synthesisData && (
-                        <div className="absolute inset-0 z-50 bg-white flex items-center justify-center">
+                        <div className="absolute inset-0 z-50 bg-background flex items-center justify-center">
                             <div className="text-center space-y-8">
                                 {/* Animated Logo/Icon */}
                                 <div className="relative">
-                                    <div className="w-24 h-24 mx-auto rounded-2xl bg-primary/20 flex items-center justify-center animate-pulse">
-                                        <TreePine className="w-12 h-12 text-primary" />
+                                    <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/30 to-pink-500/30 flex items-center justify-center animate-pulse border border-primary/20">
+                                        <Sparkles className="w-12 h-12 text-primary" />
                                     </div>
-                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                                        <Loader2 className="w-5 h-5 text-primary-foreground animate-spin" />
+                                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-pink-500 flex items-center justify-center">
+                                        <Loader2 className="w-5 h-5 text-white animate-spin" />
                                     </div>
                                 </div>
                                 
@@ -353,7 +353,7 @@ function ResultContent() {
 
             {/* Sticky Bottom Actions */}
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-                <div className="bg-background/80 backdrop-blur-md border shadow-2xl rounded-full px-8 py-3 flex items-center gap-4 transition-all hover:scale-105">
+                <div className="bg-card/90 backdrop-blur-xl border border-primary/20 shadow-2xl shadow-primary/10 rounded-full px-8 py-3 flex items-center gap-4 transition-all hover:scale-[1.02]">
                     {step === 3 && (
                         <Button variant="ghost" onClick={() => setStep(2)} size="lg" className="rounded-full">
                             Back to Testing
@@ -425,12 +425,12 @@ export default function ResultPage() {
     return (
         <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <div className="min-h-screen bg-background flex flex-col font-sans selection:bg-primary/20 pt-20">
-                <header className="fixed top-0 left-0 right-0 border-b bg-white/95 backdrop-blur z-50 h-16 flex items-center justify-between px-8">
-                    <Link href="/" className="font-bold text-lg tracking-tight flex items-center gap-2">
-                        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-                            <TreePine className="w-5 h-5 text-primary-foreground" />
+                <header className="fixed top-0 left-0 right-0 border-b border-border/50 bg-card/80 backdrop-blur-xl z-50 h-16 flex items-center justify-between px-8">
+                    <Link href="/" className="font-display font-bold text-lg tracking-tight flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-pink-500 flex items-center justify-center shadow-lg shadow-primary/25">
+                            <Sparkles className="w-5 h-5 text-white" />
                         </div>
-                        treeminspls
+                        <span className="gradient-text">Zyntara</span>
                     </Link>
                     <GitHubConnectButton />
                 </header>

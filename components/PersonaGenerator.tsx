@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, TreePine, ArrowRight, AlertCircle, ExternalLink } from "lucide-react"
+import { Loader2, Sparkles, ArrowRight, AlertCircle, ExternalLink } from "lucide-react"
 import Link from "next/link"
 
 export function PersonaGenerator() {
@@ -17,7 +17,7 @@ export function PersonaGenerator() {
 
   // Load website URL from GitHub settings in localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("treeminspls_github")
+    const stored = localStorage.getItem("zyntara_github")
     if (stored) {
       try {
         const settings = JSON.parse(stored)
@@ -52,10 +52,10 @@ export function PersonaGenerator() {
 
   return (
     <div className="w-full max-w-xl mx-auto p-4">
-      <Card className="border shadow-lg">
+      <Card className="gradient-border shadow-xl shadow-primary/5">
         <CardHeader className="text-center pb-2">
           <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-3">
-            <TreePine className="w-6 h-6 text-primary" />
+            <Sparkles className="w-6 h-6 text-primary" />
           </div>
           <CardTitle className="text-xl">Start Analysis</CardTitle>
           <CardDescription>
